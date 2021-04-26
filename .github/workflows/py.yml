@@ -29,10 +29,8 @@ jobs:
       - name: Analyze code with pylint
         if: ${{ always() }}
         run: |
-          ls
           mkdir -p .artifacts
-          ls
-          pylint flaskr/*.py > linter.txt
+          pylint -h
 
       - name: Archive linter artifacts
         if: ${{ always() }}
