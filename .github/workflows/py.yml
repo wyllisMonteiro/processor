@@ -30,7 +30,7 @@ jobs:
         if: ${{ always() }}
         run: |
           mkdir -p .artifacts
-          pylint flaskr/*.py
+          pylint flaskr/*.py > .artifacts/linter.txt
 
       - name: Archive linter artifacts
         if: ${{ always() }}
