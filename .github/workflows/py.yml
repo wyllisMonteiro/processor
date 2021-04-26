@@ -15,6 +15,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -23,13 +24,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt;
+          pip install -r requirements.txt
 
       - name: Analyze code with pylint
         if: ${{ always() }}
         run: |
           ls
           mkdir -p .artifacts
+          ls
           pylint flaskr/*.py > linter.txt
 
       - name: Archive linter artifacts
