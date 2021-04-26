@@ -11,15 +11,13 @@ load_dotenv()
 def get_db():
     if 'db' not in g:
         g.db=mysql.connector.connect(
-            host="db",
-            user="wyllis",
-            password="wyllis",
-            database="processor",
+            host=os.getenv('DB_HOST'),
+            user=os.getenv('MYSQL_USER'),
+            password=os.getenv('MYSQL_PASSWORD'),
+            database=os.getenv('MYSQL_DATABASE'),
             auth_plugin='mysql_native_password'
         )
-
     return g.db
-
 
 def close_db(event=None):
     database = g.pop('db', None)
