@@ -30,15 +30,20 @@ jobs:
         if: ${{ always() }}
         run: |
           mkdir -p .artifacts
-          pylint flaskr/*.py > .artifacts/linter.txt
+          pylint flaskr/*.py > .artifacts/pylint.txt
 
-      - name: Archive linter artifacts
+      - name: Test with pytest
+        run: |
+          pytest
+
+      - name: Analyze code with bandit
+        run: |
+          mkdir -p .artifacts
+          bandit -r flaskr -f json -o .artifacts/bandit.json
+
+      - name: Archive pylint and bandit artifacts
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
           name: artifacts
           path: .artifacts
-
-      - name: Test with pytest
-        run: |
-          pytest
