@@ -43,6 +43,7 @@ jobs:
           bandit -r flaskr -f json -o .artifacts/bandit.json
 
       - name: Archive pylint and bandit artifacts
+        if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
           name: artifacts
