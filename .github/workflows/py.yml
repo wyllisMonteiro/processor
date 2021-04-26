@@ -31,7 +31,7 @@ jobs:
           mkdir -p .artifacts
           pylint flaskr/*.py > ./.artifacts/linter.txt
 
-       - name: Archive linter artifacts
+      - name: Archive linter artifacts
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
