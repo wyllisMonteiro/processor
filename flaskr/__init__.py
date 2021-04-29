@@ -1,16 +1,31 @@
 import os
 
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
+
+database = SQLAlchemy()
+
+load_dotenv()
 
 def create_app(test_config=None):
-    # create and configure the app
+    username_db = os.getenv("MYSQL_USER")
+    pass_db = os.getenv("MYSQL_PASSWORD")
+    host_db = os.getenv("DB_HOST")
+    name_db = os.getenv("MYSQL_DATABASE")
+
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
+        SQLALCHEMY_DATABASE_URI=f"mysql://{username_db}:{pass_db}@{host_db}/{name_db}",
+        SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
 
-    from . import db
-    db.init_app(app)
+    database.init_app(app)
+
+    with app.app_context():
+        from . import models
+        database.create_all()
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
