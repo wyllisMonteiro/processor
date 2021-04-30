@@ -2,9 +2,9 @@ FROM python:3.6-stretch
 
 WORKDIR /app
 
-ENV FLASK_APP flaskr
+ENV FLASK_APP api
 ENV FLASK_RUN_HOST 0.0.0.0
-ENV FLASK_ENV prod
+ENV FLASK_ENV development
 
 COPY requirements.txt requirements.txt
 RUN /usr/local/bin/python -m pip install --upgrade pip
