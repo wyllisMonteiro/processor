@@ -1,15 +1,47 @@
-import functools
 import bcrypt
+import jwt
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify, make_response
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.exc import IntegrityError
+from datetime import datetime, timedelta
+from functools import wraps
 from flaskr import database
 from flaskr.models import user
 
 bp = Blueprint('auth', __name__, url_prefix='/api/v1/auth')
+
+def token_required(f):
+  @wraps(f)
+  def decorated(*args, **kwargs):
+    token = None
+    if 'x-access-token' in request.headers:
+      token = request.headers['x-access-token']
+    
+    if not token:
+      return jsonify({'message' : 'Token is missing !!'}), 401
+
+    try:
+      data = jwt.decode(token, "dev", "HS256")
+      current_user = user.User.query\
+        .filter_by(id = data['id'])\
+        .first()
+    except:
+      return jsonify({
+        "status": "error",
+        "message": "Token is invalid !!"
+      }), 401
+
+    return  f(current_user, *args, **kwargs)
+  
+  return decorated
+
+@bp.route('/check_token', methods=['GET'])
+@token_required
+def check_token(current_user):
+  return "Valid token !!"
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
@@ -57,20 +89,28 @@ def login():
     user_login = user.User.query.filter_by(email=email).first()
     hash_pass = user_login.password.encode('utf-8')
     error = None
+    status = 200
 
     if user_login is None:
       error = 'Incorrect email.'
+      status = 404
     elif not bcrypt.checkpw(password, hash_pass):
       error = 'Incorrect password.'
+      status = 404
 
     if error is None:
-      session.clear()
-      session['user_id'] = user_login.id
-      return str(session['user_id'])
+      token = jwt.encode({
+        'id': user_login.id,
+        'exp' : datetime.utcnow() + timedelta(minutes = 30)
+      }, "dev", "HS256")
+
+      return make_response(jsonify(
+        status="success", 
+      ), status, {"Authorization": token })
 
     flash(error)
 
-    return jsonify(
+    return make_response(jsonify(
       status="error", 
       message=error
-    )
+    ), status)
