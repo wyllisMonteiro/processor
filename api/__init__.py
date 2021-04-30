@@ -12,7 +12,6 @@ app = Flask(__name__)
 logging_conf_path = os.path.normpath(os.path.join(os.path.dirname(__file__), '../logging.conf'))
 logging.config.fileConfig(logging_conf_path)
 log = logging.getLogger(__name__)          
-
 # https://github.com/postrational/rest_api_demo
 
 def configure_app(flask_app):
