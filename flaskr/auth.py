@@ -8,15 +8,14 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.exc import IntegrityError
 from flaskr import database
 from flaskr.models import user
-from flaskr.helpers import json_response
 
 bp = Blueprint('auth', __name__, url_prefix='/api/v1/auth')
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
   if request.method == 'POST':
-    username = request.json['username']
-    email = request.json['email']
+    username = request.json['username'].encode('utf-8')
+    email = request.json['email'].encode('utf-8')
     password = bcrypt.hashpw(request.json['password'].encode('utf-8'), bcrypt.gensalt())
     error = None
 
@@ -42,6 +41,32 @@ def register():
       except IntegrityError as e:
         error='Email is already used.'
         database.session.rollback()
+
+    flash(error)
+
+    return jsonify(
+      status="error", 
+      message=error
+    )
+
+@bp.route('/login', methods=('GET', 'POST'))
+def login():
+  if request.method == 'POST':
+    email = request.json['email'].encode('utf-8')
+    password = request.json['password'].encode('utf-8')
+    user_login = user.User.query.filter_by(email=email).first()
+    hash_pass = user_login.password.encode('utf-8')
+    error = None
+
+    if user_login is None:
+      error = 'Incorrect email.'
+    elif not bcrypt.checkpw(password, hash_pass):
+      error = 'Incorrect password.'
+
+    if error is None:
+      session.clear()
+      session['user_id'] = user_login.id
+      return str(session['user_id'])
 
     flash(error)
 

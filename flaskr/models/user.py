@@ -9,3 +9,6 @@ class User(database.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
+
+    def get_password(self):
+        return self.password
