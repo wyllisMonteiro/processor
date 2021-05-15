@@ -1,9 +1,7 @@
 import bcrypt
 import jwt
-import jsonify
 
 from flask import request
-from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime, timedelta
 from functools import wraps
@@ -28,7 +26,7 @@ def token_required(f):
       return {'message' : 'Token is missing !!'}, 401
 
     return f(current_user, *args, **kwargs)
-  
+ 
   return decorated
 
 def register(data):
