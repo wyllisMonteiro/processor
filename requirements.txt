@@ -23,6 +23,8 @@ linecache2==1.0.0
 MarkupSafe==1.1.1
 mccabe==0.6.1
 mysqlclient==2.0.3
+numpy==1.19.3
+opencv-python==4.5.2.52
 packaging==20.9
 pbr==5.6.0
 pluggy==0.13.1
@@ -30,6 +32,9 @@ py==1.10.0
 pycparser==2.20
 PyJWT==2.1.0
 pylint==2.8.2
+pylint-flask==0.6
+pylint-flask-sqlalchemy==0.2.0
+pylint-plugin-utils==0.6
 pyparsing==2.4.7
 pyrsistent==0.17.3
 pytest==6.2.3

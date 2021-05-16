@@ -9,13 +9,13 @@ from functools import wraps
 from api.v1.database import database
 from api.v1.database.user import User
 
-def token_required(f):
-  @wraps(f)
+def token_required(callback):
+  @wraps(callback)
   def decorated(*args, **kwargs):
     token = None
     if 'x-access-token' in request.headers:
       token = request.headers['x-access-token']
-    
+
     if not token:
       return {'message' : 'Token is missing !!'}, 401
 
@@ -25,8 +25,8 @@ def token_required(f):
     except:
       return {'message' : 'Token is missing !!'}, 401
 
-    return f(current_user, *args, **kwargs)
- 
+    return callback(current_user, *args, **kwargs)
+
   return decorated
 
 def register(data):

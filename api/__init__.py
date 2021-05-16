@@ -9,6 +9,7 @@ from werkzeug.middleware.shared_data import SharedDataMiddleware
 from api.v1.database import database
 from api.v1.auth.auth import ns as auth
 from api.v1.upload.upload import ns as upload
+from api.v1.processor.processor import ns as processor
 
 app = Flask(__name__)
 logging_conf_path = os.path.normpath(os.path.join(os.path.dirname(__file__), '../logging.conf'))
@@ -24,11 +25,6 @@ def configure_app(flask_app):
   flask_app.config['RESTPLUS_MASK_SWAGGER'] = settings.RESTPLUS_MASK_SWAGGER
   flask_app.config['ERROR_404_HELP'] = settings.RESTPLUS_ERROR_404_HELP
 
-  #flask_app.add_url_rule('/api/v1/uploads/images/<filename>', 'uploaded_file', build_only=True)
-  #flask_app.wsgi_app = SharedDataMiddleware(flask_app.wsgi_app, {
-  #  '/uploads':  os.getenv("UPLOAD_FOLDER")
-  #})
-
 def initialize_app(flask_app):
   configure_app(flask_app)
 
@@ -36,6 +32,7 @@ def initialize_app(flask_app):
   api.init_app(blueprint)
   api.add_namespace(auth)
   api.add_namespace(upload)
+  api.add_namespace(processor)
 
   flask_app.register_blueprint(blueprint)
 
