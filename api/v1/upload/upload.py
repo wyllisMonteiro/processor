@@ -14,38 +14,40 @@ log = logging.getLogger(__name__)
 
 ns = api.namespace('', description='Operations related to upload of images')
 
+
 @ns.route('/uploaded_image')
 class UploadedImageItem(Resource):
 
-  @staticmethod
-  def post():
-    """
+    @staticmethod
+    def post():
+        """
     Returns image uploaded
     """
-    uploads_path = Upload.get_image_path("")
-    file_name = request.args.get("filename")
-    return send_from_directory(uploads_path, file_name)
+        uploads_path = Upload.get_image_path("")
+        file_name = request.args.get("filename")
+        return send_from_directory(uploads_path, file_name)
+
 
 @ns.route('/uploads/images')
 class UploadImageItem(Resource):
 
-  @staticmethod
-  @token_required
-  def post(current_user):
-    """
+    @staticmethod
+    @token_required
+    def post(current_user):
+        """
     Returns image uploaded
     """
-    if 'file' not in request.files:
-      return redirect(request.url)
-    file = request.files['file']
-    if file.filename == '':
-      return redirect(request.url)
-    if file and allowed_file(file.filename):
-      filename = secure_filename(file.filename)
-      upload_folder = os.getenv("UPLOAD_FOLDER")
-      file.save(os.path.join(upload_folder, filename))
-      return redirect(url_for('api._uploaded_image_item', filename=filename))
-    return '''
+        if 'file' not in request.files:
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            upload_folder = os.getenv("UPLOAD_FOLDER")
+            file.save(os.path.join(upload_folder, filename))
+            return redirect(url_for('api._uploaded_image_item', filename=filename))
+        return '''
     <!doctype html>
     <title>Upload new File</title>
     <h1>Upload new File</h1>
