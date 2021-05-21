@@ -1,10 +1,10 @@
 import os
 
 from flask import request
-import cv2
 
 from api.services.upload import Upload
-from api.services.processor import Processor
+from api.services.processor.gray_impl import Gray
+from api.services.processor.brightness_impl import Brightness
 
 
 def apply_gray_and_save():
@@ -16,7 +16,9 @@ def apply_gray_and_save():
         return "no image found"
 
     saved_img_path = Upload.get_image_path(image_name.split('.')[0] + "_compressor.jpg")
-    Processor.apply_gray_and_save(src_img_path, saved_img_path)
+
+    processor = Gray(src_img_path, saved_img_path)
+    processor.apply_and_save()
 
 
 def apply_brightness_and_save():
@@ -29,4 +31,6 @@ def apply_brightness_and_save():
 
     saved_img_path = Upload.get_image_path(image_name.split('.')[0] + "_compressor.jpg")
     level = request.json["brightness"]
-    Processor.apply_brightness_and_save(src_img_path, saved_img_path, level)
+
+    processor = Brightness(src_img_path, saved_img_path, level)
+    processor.apply_and_save()
