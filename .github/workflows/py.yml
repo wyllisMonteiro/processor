@@ -30,7 +30,7 @@ jobs:
         if: ${{ always() }}
         run: |
           mkdir -p .artifacts
-          pylint api/*.py > .artifacts/pylint.txt
+          pylint api/**/*.py > .artifacts/pylint.txt
 
       - name: Test with pytest
         run: |
