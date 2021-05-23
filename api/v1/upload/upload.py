@@ -21,8 +21,17 @@ class UploadedImageItem(Resource):
     @staticmethod
     def post():
         """
-    Returns image uploaded
-    """
+        Returns image uploaded
+        """
+        uploads_path = Upload.get_image_path("")
+        file_name = request.args.get("filename")
+        return send_from_directory(uploads_path, file_name)
+
+    @staticmethod
+    def get():
+        """
+        Returns image uploaded
+        """
         uploads_path = Upload.get_image_path("")
         file_name = request.args.get("filename")
         return send_from_directory(uploads_path, file_name)
@@ -35,8 +44,8 @@ class UploadImageItem(Resource):
     @token_required
     def post(current_user):
         """
-    Returns image uploaded
-    """
+        Returns image uploaded
+        """
         if 'file' not in request.files:
             return redirect(request.url)
         file = request.files['file']
@@ -48,11 +57,11 @@ class UploadImageItem(Resource):
             file.save(os.path.join(upload_folder, filename))
             return redirect(url_for('api._uploaded_image_item', filename=filename))
         return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+            <!doctype html>
+            <title>Upload new File</title>
+            <h1>Upload new File</h1>
+            <form method=post enctype=multipart/form-data>
+              <input type=file name=file>
+              <input type=submit value=Upload>
+            </form>
+        '''

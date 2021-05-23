@@ -1,12 +1,13 @@
 import logging
 import os
 
-from flask import request
+from flask import request, redirect, url_for, send_from_directory
 
 from flask_restx import Resource
 from api.restplus import api
 from api.v1.auth.logic import token_required
 from api.v1.processor.logic import Logic
+from api.services.upload import Upload
 
 log = logging.getLogger(__name__)
 
@@ -28,8 +29,8 @@ class ImageGrayItem(Resource):
         logic.set_image_name(request.json["filename"])
 
         try:
-            logic.apply_gray_and_save()
-            return "success"
+            saved_filename = logic.apply_gray_and_save()
+            return redirect(url_for('api._uploaded_image_item', filename=saved_filename))
         except ValueError as error:
             return error.args
 
@@ -45,8 +46,8 @@ class ImageBrightnessItem(Resource):
         logic.set_image_name(request.json["filename"])
 
         try:
-            logic.apply_brightness_and_save()
-            return "success"
+            saved_filename = logic.apply_brightness_and_save()
+            return redirect(url_for('api._uploaded_image_item', filename=saved_filename))
         except ValueError as error:
             return error.args
 
@@ -62,7 +63,7 @@ class ImageDuoToneItem(Resource):
         logic.set_image_name(request.json["filename"])
 
         try:
-            logic.apply_duo_tone_and_save()
-            return "success"
+            saved_filename = logic.apply_duo_tone_and_save()
+            return redirect(url_for('api._uploaded_image_item', filename=saved_filename))
         except ValueError as error:
             return error.args
