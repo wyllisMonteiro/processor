@@ -1,5 +1,6 @@
-from api.services.processor.processor import Processor
 import cv2 as cv
+from api.services.processor.processor import Processor
+
 
 class Brightness(Processor):
 

@@ -1,5 +1,6 @@
-from api.services.processor.processor import Processor
 import cv2 as cv
+from api.services.processor.processor import Processor
+
 
 class Gray(Processor):
 
@@ -12,4 +13,3 @@ class Gray(Processor):
         gray_image = cv.cvtColor(original_image, cv.COLOR_BGR2GRAY)
 
         cv.imwrite(self.saved_img_path, gray_image)
-

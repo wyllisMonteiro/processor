@@ -16,7 +16,9 @@ class CheckItem(Resource):
 
     @staticmethod
     @token_required
-    def get(current_user):
+    def get(
+        current_user  # pylint: disable=unused-argument
+    ):
         return "Valid token !!"
 
 

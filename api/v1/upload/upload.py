@@ -42,7 +42,9 @@ class UploadImageItem(Resource):
 
     @staticmethod
     @token_required
-    def post(current_user):
+    def post(
+        current_user  # pylint: disable=unused-argument
+    ):
         """
         Returns image uploaded
         """

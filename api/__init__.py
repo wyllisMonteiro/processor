@@ -5,7 +5,6 @@ from flask import Flask, Blueprint
 
 from api import settings
 from api.restplus import api
-from werkzeug.middleware.shared_data import SharedDataMiddleware
 from api.v1.database import database
 from api.v1.auth.auth import ns as auth
 from api.v1.upload.upload import ns as upload

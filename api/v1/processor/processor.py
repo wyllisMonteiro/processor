@@ -1,13 +1,12 @@
 import logging
 import os
 
-from flask import request, redirect, url_for, send_from_directory
+from flask import request, redirect, url_for
 
 from flask_restx import Resource
 from api.restplus import api
 from api.v1.auth.logic import token_required
 from api.v1.processor.logic import Logic
-from api.services.upload import Upload
 
 log = logging.getLogger(__name__)
 
@@ -22,7 +21,9 @@ class ImageGrayItem(Resource):
 
     @staticmethod
     @token_required
-    def post(current_user):
+    def post(
+        current_user  # pylint: disable=unused-argument
+    ):
         """
         Returns gray image
         """
@@ -39,7 +40,9 @@ class ImageGrayItem(Resource):
 class ImageBrightnessItem(Resource):
     @staticmethod
     @token_required
-    def post(current_user):
+    def post(
+        current_user  # pylint: disable=unused-argument
+    ):
         """
         Returns brightness image
         """
@@ -56,7 +59,9 @@ class ImageBrightnessItem(Resource):
 class ImageDuoToneItem(Resource):
     @staticmethod
     @token_required
-    def post(current_user):
+    def post(
+        current_user  # pylint: disable=unused-argument
+    ):
         """
         Returns brightness image
         """

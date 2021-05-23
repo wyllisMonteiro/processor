@@ -5,7 +5,7 @@ from flask import request
 from api.services.upload import Upload
 from api.services.processor.gray_impl import Gray
 from api.services.processor.brightness_impl import Brightness
-from api.services.processor.duo_tone_impl import Duo_tone
+from api.services.processor.duo_tone_impl import DuoTone, DuoToneInfo
 
 
 class Logic:
@@ -51,7 +51,8 @@ class Logic:
         second_tone = request.json["second_tone"]
         light = request.json["light"]
 
-        processor = Duo_tone(src_img_path, saved_img_path, exp, first_tone, second_tone, light)
+        duo_tone_info = DuoToneInfo(exp, first_tone, second_tone, light)
+        processor = DuoTone(src_img_path, saved_img_path, duo_tone_info)
         processor.apply_and_save()
 
         return saved_image_name

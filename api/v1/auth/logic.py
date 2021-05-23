@@ -1,10 +1,11 @@
+from datetime import datetime, timedelta
+from functools import wraps
 import bcrypt
 import jwt
 
 from flask import request
 from sqlalchemy.exc import IntegrityError
-from datetime import datetime, timedelta
-from functools import wraps
+from jwt import exceptions
 
 from api.v1.database import database
 from api.v1.database.user import User
@@ -23,7 +24,7 @@ def token_required(callback):
         try:
             data = jwt.decode(token, "dev", "HS256")
             current_user = User.query.filter(User.id == data['id']).one()
-        except:
+        except exceptions.InvalidSignatureError:
             return {'message': 'Token is missing !!'}, 401
 
         return callback(current_user, *args, **kwargs)
@@ -59,7 +60,7 @@ def register(data):
             database.session.commit()
 
             return "Registered successfully !", status
-        except IntegrityError as e:
+        except IntegrityError:
             error = "Email is already used."
             status = 500
             database.session.rollback()
