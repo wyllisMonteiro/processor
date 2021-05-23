@@ -1,0 +1,15 @@
+[MASTER]
+disable=
+  C0114,
+  C0115,
+  C0116,
+
+# String used as indentation unit. This is usually "    " (4 spaces) or "\t" (1
+# tab).
+#indent-string='  '
+
+# Number of spaces of indent required inside a hanging  or continued line.
+indent-after-paren=3
+
+# Instance of 'scoped_session' has no 'add' member
+ignored-classes=scoped_session
